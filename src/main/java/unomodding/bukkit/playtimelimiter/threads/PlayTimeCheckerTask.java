@@ -4,37 +4,39 @@
  * This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.
  */
-package me.ryandowling.noplaysolong.threads;
+package unomodding.bukkit.playtimelimiter.threads;
 
 import java.io.File;
 import java.util.TimerTask;
 
-import me.ryandowling.noplaysolong.NoPlaySoLong;
-import me.ryandowling.noplaysolong.utils.FileUtils;
-import me.ryandowling.noplaysolong.utils.Timestamper;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-public class PlayTimeCheckerTask extends TimerTask {
-    private final NoPlaySoLong plugin;
+import unomodding.bukkit.playtimelimiter.PlayTimeLimiter;
+import unomodding.bukkit.playtimelimiter.utils.FileUtils;
+import unomodding.bukkit.playtimelimiter.utils.Timestamper;
 
-    public PlayTimeCheckerTask(NoPlaySoLong instance) {
+public class PlayTimeCheckerTask extends TimerTask
+{
+    private final PlayTimeLimiter plugin;
+
+    public PlayTimeCheckerTask(PlayTimeLimiter instance) {
         this.plugin = instance;
     }
 
     @Override
-    public void run() {
+    public void run()
+    {
         for (Player player : this.plugin.getServer().getOnlinePlayers()) {
             int timeLeft = this.plugin.getTimeAllowedInSeconds(player.getName());
             if (timeLeft <= 0) {
                 FileUtils.appendStringToFile(
                         new File(this.plugin.getDataFolder(), "playtime.log"),
-                        String.format("[%s] %s was kicked for exceeding play time",
-                                Timestamper.now(), player.getName()));
+                        String.format("[%s] %s was kicked for exceeding play time", Timestamper.now(),
+                                player.getName()));
                 player.kickPlayer("You have exceeded the time allowed to play! Come back in "
-                        + this.plugin.secondsToDaysHoursSecondsString(this.plugin
-                                .secondsUntilNextDay()) + "!");
+                        + this.plugin.secondsToDaysHoursSecondsString(this.plugin.secondsUntilNextDay())
+                        + "!");
             } else if (timeLeft <= 10 && !this.plugin.hasPlayerSeenMessage(player.getName(), 10)) {
                 player.sendMessage(ChatColor.RED
                         + "WARNING!"

@@ -4,12 +4,10 @@
  * This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.
  */
-package me.ryandowling.noplaysolong;
+package unomodding.bukkit.playtimelimiter;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import me.ryandowling.noplaysolong.exceptions.UnknownPlayerException;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
@@ -19,14 +17,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class PlayTimeCommand implements CommandExecutor {
-    private final NoPlaySoLong plugin;
+import unomodding.bukkit.playtimelimiter.exceptions.UnknownPlayerException;
 
-    public PlayTimeCommand(NoPlaySoLong plugin) {
+public class PlayTimeCommand implements CommandExecutor
+{
+    private final PlayTimeLimiter plugin;
+
+    public PlayTimeCommand(PlayTimeLimiter plugin) {
         this.plugin = plugin;
     }
 
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+    {
         boolean isPlayer = true;
         Server server = plugin.getServer();
         ConsoleCommandSender console = server.getConsoleSender();
@@ -42,8 +44,7 @@ public class PlayTimeCommand implements CommandExecutor {
 
         if (args[0].equals("start") && args.length == 1) {
             if (!sender.hasPermission("noplaysolong.start")) {
-                sender.sendMessage(ChatColor.RED
-                        + "You don't have permission to start the playtime counter!");
+                sender.sendMessage(ChatColor.RED + "You don't have permission to start the playtime counter!");
                 return false;
             } else {
                 if (plugin.start()) {
@@ -106,17 +107,16 @@ public class PlayTimeCommand implements CommandExecutor {
             }
             if (args.length == 1 && isPlayer) {
                 if (!sender.hasPermission("noplaysolong.playtime.check.self")) {
-                    sender.sendMessage(ChatColor.RED
-                            + "You don't have permission to check your playtime!");
+                    sender.sendMessage(ChatColor.RED + "You don't have permission to check your playtime!");
                     return false;
                 } else {
                     sender.sendMessage(ChatColor.GREEN
                             + "You have played for "
-                            + plugin.secondsToDaysHoursSecondsString(plugin
-                                    .getPlayerPlayTime(sender.getName()))
+                            + plugin.secondsToDaysHoursSecondsString(plugin.getPlayerPlayTime(sender
+                                    .getName()))
                             + " and have "
-                            + plugin.secondsToDaysHoursSecondsString(plugin
-                                    .getTimeAllowedInSeconds(sender.getName())) + " remaining!");
+                            + plugin.secondsToDaysHoursSecondsString(plugin.getTimeAllowedInSeconds(sender
+                                    .getName())) + " remaining!");
                     return true;
                 }
             } else if (args.length == 2) {
@@ -125,14 +125,11 @@ public class PlayTimeCommand implements CommandExecutor {
                             + "You don't have permission to check other players playtime!");
                     return false;
                 } else {
-                    sender.sendMessage(ChatColor.GREEN
-                            + args[1]
-                            + " has played for "
-                            + plugin.secondsToDaysHoursSecondsString(plugin
-                                    .getPlayerPlayTime(args[1]))
+                    sender.sendMessage(ChatColor.GREEN + args[1] + " has played for "
+                            + plugin.secondsToDaysHoursSecondsString(plugin.getPlayerPlayTime(args[1]))
                             + " and has "
-                            + plugin.secondsToDaysHoursSecondsString(plugin
-                                    .getTimeAllowedInSeconds(args[1])) + " remaining!");
+                            + plugin.secondsToDaysHoursSecondsString(plugin.getTimeAllowedInSeconds(args[1]))
+                            + " remaining!");
                     return true;
                 }
             }
@@ -143,7 +140,8 @@ public class PlayTimeCommand implements CommandExecutor {
         return false;
     }
 
-    public void printUsage(CommandSender sender) {
+    public void printUsage(CommandSender sender)
+    {
         List<String> usage = new ArrayList<String>();
         usage.add(ChatColor.YELLOW + "/playtime usage:");
         if (sender.hasPermission("noplaysolong.playtime.add")) {
@@ -151,9 +149,7 @@ public class PlayTimeCommand implements CommandExecutor {
                     + " - Add time in seconds to the user's playtime.");
         }
         if (sender.hasPermission("noplaysolong.playtime.check.others")) {
-            usage.add(ChatColor.AQUA
-                    + "/playtime check [user]"
-                    + ChatColor.RESET
+            usage.add(ChatColor.AQUA + "/playtime check [user]" + ChatColor.RESET
                     + " - Check the time played and time left for a given user, or if blank, for yourself.");
         } else if (sender.hasPermission("noplaysolong.playtime.check.self")) {
             usage.add(ChatColor.AQUA + "/playtime check" + ChatColor.RESET

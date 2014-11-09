@@ -1,31 +1,35 @@
-name: No Play So Long
-main: me.ryandowling.noplaysolong.NoPlaySoLong
-version: 0.0.0.1
+name: PlayTimeLimiter
+main: unomodding.bukkit.playtimelimiter.PlayTimeLimiter
+version: 0.1
 commands:
   playtime:
-    description: Commands for the No Play So Long plugin relating to players time played.
+    description: Commands for the PlayTimeLimiter plugin relating to players time played.
     aliases: pt
 permissions:
-  noplaysolong.*:
-    description: Gives access to all No Play So Long commands.
+  playtimelimiter.*:
+    description: Gives access to all PlayTimeLimiter commands.
     children:
-      noplaysolong.playtime.check.add: true
-      noplaysolong.playtime.check.remove: true
-      noplaysolong.playtime.check.self: true
-      noplaysolong.playtime.check.others: true
-      noplaysolong.start: true
-  noplaysolong.playtime.add:
+      playtimelimiter.playtime.add: true
+      playtimelimiter.playtime.remove: true
+      playtimelimiter.playtime.check.self: true
+      playtimelimiter.playtime.check.others: true
+      playtimelimiter.playtime.start: true
+      playtimelimiter.playtime.stop: true
+  playtimelimiter.playtime.add:
     description: Gives access to be able to add time to a players play time.
     default: op
-  noplaysolong.playtime.remove:
+  playtimelimiter.playtime.remove:
     description: Gives access to be able to remove time from a players play time.
     default: op
-  noplaysolong.playtime.check.self:
+  playtimelimiter.playtime.check.self:
     description: Gives access to the /playtime check command to check own playtime.
     default: true
-  noplaysolong.playtime.check.others:
+  playtimelimiter.playtime.check.others:
     description: Gives access to the /playtime check command to check others playtime.
     default: op
-  noplaysolong.start:
+  playtimelimiter.playtime.start:
     description: Gives access to the /playtime start command which starts the timer.
+    default: op
+  playtimelimiter.playtime.stop
+    description: Gives access to the /playtime stop command which stops the timer.
     default: op

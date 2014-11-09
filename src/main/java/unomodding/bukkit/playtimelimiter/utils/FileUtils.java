@@ -4,7 +4,7 @@
  * This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.
  */
-package me.ryandowling.noplaysolong.utils;
+package unomodding.bukkit.playtimelimiter.utils;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,8 +12,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class FileUtils {
-    public static void appendStringToFile(File file, String string) {
+public class FileUtils
+{
+    public static void appendStringToFile(File file, String string)
+    {
         FileWriter fw = null;
         BufferedWriter bw = null;
         PrintWriter pw = null;

@@ -4,7 +4,7 @@
  * This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.
  */
-package me.ryandowling.noplaysolong;
+package unomodding.bukkit.playtimelimiter;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -16,15 +16,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 
-import me.ryandowling.noplaysolong.exceptions.UnknownPlayerException;
-import me.ryandowling.noplaysolong.threads.PlayTimeCheckerTask;
-import me.ryandowling.noplaysolong.threads.PlayTimeSaverTask;
-import me.ryandowling.noplaysolong.threads.ShutdownThread;
-
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import unomodding.bukkit.playtimelimiter.exceptions.UnknownPlayerException;
+import unomodding.bukkit.playtimelimiter.threads.PlayTimeCheckerTask;
+import unomodding.bukkit.playtimelimiter.threads.PlayTimeSaverTask;
+import unomodding.bukkit.playtimelimiter.threads.ShutdownThread;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -34,7 +34,8 @@ import com.google.gson.reflect.TypeToken;
  * 
  * @author RyanTheAllmighty
  */
-public class NoPlaySoLong extends JavaPlugin {
+public class PlayTimeLimiter extends JavaPlugin
+{
     private final PlayerListener playerListener = new PlayerListener(this);
     private final BlockListener blockListener = new BlockListener();
     private Map<String, Integer> timePlayed = new HashMap<String, Integer>();
@@ -48,12 +49,14 @@ public class NoPlaySoLong extends JavaPlugin {
     private final Gson GSON = new Gson();
 
     @Override
-    public void onDisable() {
+    public void onDisable()
+    {
         this.savePlayTime(); // Save the playtime to file on plugin disable
     }
 
     @Override
-    public void onEnable() {
+    public void onEnable()
+    {
         if (!this.shutdownHookAdded) {
             this.shutdownHookAdded = true;
             try {
@@ -94,8 +97,8 @@ public class NoPlaySoLong extends JavaPlugin {
             saveConfig();
         }
 
-        getLogger()
-                .info(String.format("Server started at %s which was %s seconds ago!", getConfig()
+        getLogger().info(
+                String.format("Server started at %s which was %s seconds ago!", getConfig()
                         .get("timeStarted"), this.secondsToDaysHoursSecondsString((int) ((System
                         .currentTimeMillis() / 1000) - getConfig().getInt("timeStarted")))));
 
@@ -107,18 +110,19 @@ public class NoPlaySoLong extends JavaPlugin {
 
         if (savePlayTimeTimer == null) {
             this.savePlayTimeTimer = new Timer();
-            this.savePlayTimeTimer.scheduleAtFixedRate(new PlayTimeSaverTask(this), 30000,
-                    getConfig().getInt("secondsBetweenPlayTimeSaving") * 1000);
+            this.savePlayTimeTimer.scheduleAtFixedRate(new PlayTimeSaverTask(this), 30000, getConfig()
+                    .getInt("secondsBetweenPlayTimeSaving") * 1000);
         }
 
         if (checkPlayTimeTimer == null) {
             this.checkPlayTimeTimer = new Timer();
-            this.checkPlayTimeTimer.scheduleAtFixedRate(new PlayTimeCheckerTask(this), 30000,
-                    getConfig().getInt("secondsBetweenPlayTimeChecks") * 1000);
+            this.checkPlayTimeTimer.scheduleAtFixedRate(new PlayTimeCheckerTask(this), 30000, getConfig()
+                    .getInt("secondsBetweenPlayTimeChecks") * 1000);
         }
     }
 
-    public int secondsUntilNextDay() {
+    public int secondsUntilNextDay()
+    {
         int timeStarted = getConfig().getInt("timeStarted");
         int secondsSince = (int) ((System.currentTimeMillis() / 1000) - timeStarted);
 
@@ -129,14 +133,16 @@ public class NoPlaySoLong extends JavaPlugin {
         return secondsSince;
     }
 
-    public String secondsToDaysHoursSecondsString(int secondsToConvert) {
+    public String secondsToDaysHoursSecondsString(int secondsToConvert)
+    {
         int hours = secondsToConvert / 3600;
         int minutes = (secondsToConvert % 3600) / 60;
         int seconds = secondsToConvert % 60;
         return String.format("%02d hours, %02d minutes & %02d seconds", hours, minutes, seconds);
     }
 
-    public int getTimeAllowedInSeconds() {
+    public int getTimeAllowedInSeconds()
+    {
         int timeStarted = getConfig().getInt("timeStarted");
         int secondsSince = (int) ((System.currentTimeMillis() / 1000) - timeStarted);
         int secondsAllowed = 0;
@@ -144,7 +150,8 @@ public class NoPlaySoLong extends JavaPlugin {
         // Add the initial time we give the player at the beginning
         secondsAllowed += getConfig().getInt("initialTime");
 
-        // Then for each day including the first day (24 hours realtime) add the set amount of
+        // Then for each day including the first day (24 hours realtime) add the
+        // set amount of
         // seconds to the time allowed
         while (secondsSince >= 0) {
             secondsAllowed += getConfig().getInt("timePerDay");
@@ -154,16 +161,19 @@ public class NoPlaySoLong extends JavaPlugin {
         return secondsAllowed;
     }
 
-    public int getTimeAllowedInSeconds(String player) {
+    public int getTimeAllowedInSeconds(String player)
+    {
         int secondsAllowed = this.getTimeAllowedInSeconds();
 
-        // Remove the amount of time the player has played to get their time allowed
+        // Remove the amount of time the player has played to get their time
+        // allowed
         secondsAllowed -= getPlayerPlayTime(player);
 
         return secondsAllowed;
     }
 
-    public void addPlayTime(String player, int seconds) {
+    public void addPlayTime(String player, int seconds)
+    {
         if (this.timePlayed.containsKey(player)) {
             this.timePlayed.put(player, this.timePlayed.get(player) + seconds);
         } else {
@@ -171,7 +181,8 @@ public class NoPlaySoLong extends JavaPlugin {
         }
     }
 
-    public void removePlayTime(String player, int seconds) throws UnknownPlayerException {
+    public void removePlayTime(String player, int seconds) throws UnknownPlayerException
+    {
         if (this.timePlayed.containsKey(player)) {
             this.timePlayed.put(player, this.timePlayed.get(player) - seconds);
         } else {
@@ -179,19 +190,20 @@ public class NoPlaySoLong extends JavaPlugin {
         }
     }
 
-    public int getPlayerPlayTime(String player) {
+    public int getPlayerPlayTime(String player)
+    {
         int timePlayed = 0;
         if (this.timePlayed.containsKey(player)) {
             timePlayed += this.timePlayed.get(player);
         }
         if (this.timeLoggedIn.containsKey(player)) {
-            timePlayed += (int) ((System.currentTimeMillis() / 1000) - this.timeLoggedIn
-                    .get(player));
+            timePlayed += (int) ((System.currentTimeMillis() / 1000) - this.timeLoggedIn.get(player));
         }
         return timePlayed;
     }
 
-    public void setPlayerLoggedIn(String player) {
+    public void setPlayerLoggedIn(String player)
+    {
         if (!this.timePlayed.containsKey(player)) {
             this.timePlayed.put(player, 0);
             this.savePlayTime();
@@ -199,10 +211,10 @@ public class NoPlaySoLong extends JavaPlugin {
         this.timeLoggedIn.put(player, (int) (System.currentTimeMillis() / 1000));
     }
 
-    public void setPlayerLoggedOut(String player) {
+    public void setPlayerLoggedOut(String player)
+    {
         if (this.timeLoggedIn.containsKey(player)) {
-            int timePlayed = (int) ((System.currentTimeMillis() / 1000) - this.timeLoggedIn
-                    .get(player));
+            int timePlayed = (int) ((System.currentTimeMillis() / 1000) - this.timeLoggedIn.get(player));
             if (this.timePlayed.containsKey(player)) {
                 timePlayed += this.timePlayed.get(player);
             }
@@ -211,8 +223,7 @@ public class NoPlaySoLong extends JavaPlugin {
             }
             this.timePlayed.put(player, timePlayed);
             this.timeLoggedIn.remove(player);
-            getLogger().info(
-                    "Player " + player + " played for a total of " + timePlayed + " seconds!");
+            getLogger().info("Player " + player + " played for a total of " + timePlayed + " seconds!");
             this.savePlayTime();
         }
         if (this.seenWarningMessages.containsKey(player + ":10")) {
@@ -226,7 +237,8 @@ public class NoPlaySoLong extends JavaPlugin {
         }
     }
 
-    public boolean hasPlayerSeenMessage(String player, int time) {
+    public boolean hasPlayerSeenMessage(String player, int time)
+    {
         if (this.seenWarningMessages.containsKey(player + ":" + time)) {
             return this.seenWarningMessages.get(player + ":" + time);
         } else {
@@ -234,11 +246,13 @@ public class NoPlaySoLong extends JavaPlugin {
         }
     }
 
-    public void sentPlayerWarningMessage(String player, int time) {
+    public void sentPlayerWarningMessage(String player, int time)
+    {
         this.seenWarningMessages.put(player + ":" + time, true);
     }
 
-    public boolean start() {
+    public boolean start()
+    {
         if (this.started) {
             return false;
         } else {
@@ -255,11 +269,13 @@ public class NoPlaySoLong extends JavaPlugin {
         }
     }
 
-    public boolean hasStarted() {
+    public boolean hasStarted()
+    {
         return this.started;
     }
 
-    public void loadPlayTime() {
+    public void loadPlayTime()
+    {
         if (!hasStarted()) {
             return;
         }
@@ -286,11 +302,13 @@ public class NoPlaySoLong extends JavaPlugin {
         }
     }
 
-    public void savePlayTime() {
+    public void savePlayTime()
+    {
         this.savePlayTime(false);
     }
 
-    public void savePlayTime(boolean force) {
+    public void savePlayTime(boolean force)
+    {
         if (!hasStarted()) {
             return;
         }

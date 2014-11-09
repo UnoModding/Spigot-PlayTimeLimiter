@@ -3,15 +3,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>me.ryandowling</groupId>
-	<artifactId>noplaysolong</artifactId>
-	<name>NoPlaySoLong</name>
-	<version>0.0.0.1</version>
+	<groupId>unomodding.bukkit</groupId>
+	<artifactId>playtimelimiter</artifactId>
+	<name>PlayTimeLimiter</name>
+	<version>0.1</version>
 	<packaging>jar</packaging>
-	<description>
-        No Play So Long is a Bukkit plugin for Minecraft to only allow players to play for a certain amount of time on a server.
-    </description>
-	<url>http://www.ryandowling.me</url>
+	<url>https://github.com/UnoModding/PlayTimeLimiter</url>
+	<inceptionYear>2014</inceptionYear>
+	<description>PlayTimeLimiter is a Bukkit plugin for Minecraft servers to only allow players to limit the amount of time players spent on your server.</description>
 
 	<repositories>
 		<repository>
@@ -21,12 +20,6 @@
 	</repositories>
 
 	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
@@ -63,29 +56,6 @@
 						<phase>package</phase>
 						<goals>
 							<goal>shade</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
-				<executions>
-					<execution>
-						<id>compile</id>
-						<phase>package</phase>
-						<configuration>
-							<target>
-								<copy todir="server/plugins" verbose="yes">
-									<fileset dir="target/">
-										<include name="noplay*.jar" />
-									</fileset>
-								</copy>
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
 						</goals>
 					</execution>
 				</executions>
