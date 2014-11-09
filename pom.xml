@@ -10,7 +10,7 @@
 	<packaging>jar</packaging>
 	<url>https://github.com/UnoModding/PlayTimeLimiter</url>
 	<inceptionYear>2014</inceptionYear>
-	<description>PlayTimeLimiter is a Bukkit plugin for Minecraft servers to only allow players to limit the amount of time players spent on your server.</description>
+	<description>PlayTimeLimiter is a Bukkit plugin for Minecraft servers to only allow players to limit the amount of time players spend on your server.</description>
 
 	<repositories>
 		<repository>

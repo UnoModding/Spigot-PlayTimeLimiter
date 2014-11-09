@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 by RyanTheAllmighty and Contributors
+ * Copyright 2014 by UnoModding, RyanTheAllmighty and Contributors
  *
  * This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.
@@ -30,14 +30,14 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 /**
- * No Play So Long plugin for Bukkit
+ * PlayTimeLimiter plugin for Bukkit
  * 
  * @author RyanTheAllmighty
+ * @author Jamie Mansfield <https://github.com/lexware>
  */
 public class PlayTimeLimiter extends JavaPlugin
 {
     private final PlayerListener playerListener = new PlayerListener(this);
-    private final BlockListener blockListener = new BlockListener();
     private Map<String, Integer> timePlayed = new HashMap<String, Integer>();
     private Map<String, Integer> timeLoggedIn = new HashMap<String, Integer>();
     private Map<String, Boolean> seenWarningMessages = new HashMap<String, Boolean>();
@@ -68,7 +68,6 @@ public class PlayTimeLimiter extends JavaPlugin
         // Register our events
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(playerListener, this);
-        pm.registerEvents(blockListener, this);
 
         // Register our commands
         getCommand("playtime").setExecutor(new PlayTimeCommand(this));
@@ -172,19 +171,19 @@ public class PlayTimeLimiter extends JavaPlugin
         return secondsAllowed;
     }
 
-    public void addPlayTime(String player, int seconds)
+    public void addPlayTime(String player, int seconds) throws UnknownPlayerException
     {
         if (this.timePlayed.containsKey(player)) {
-            this.timePlayed.put(player, this.timePlayed.get(player) + seconds);
+            this.timePlayed.put(player, this.timePlayed.get(player) - seconds);
         } else {
-            this.timePlayed.put(player, seconds);
+            throw new UnknownPlayerException(player);
         }
     }
 
     public void removePlayTime(String player, int seconds) throws UnknownPlayerException
     {
         if (this.timePlayed.containsKey(player)) {
-            this.timePlayed.put(player, this.timePlayed.get(player) - seconds);
+            this.timePlayed.put(player, this.timePlayed.get(player) + seconds);
         } else {
             throw new UnknownPlayerException(player);
         }
@@ -265,6 +264,16 @@ public class PlayTimeLimiter extends JavaPlugin
                             + " hour/s of playtime added per day!");
             getConfig().set("timeStarted", (System.currentTimeMillis() / 1000));
             saveConfig();
+            return true;
+        }
+    }
+
+    public boolean stop()
+    {
+        if (!this.started) {
+            return false;
+        } else {
+            this.started = false;
             return true;
         }
     }
