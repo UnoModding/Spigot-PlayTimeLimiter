@@ -72,7 +72,8 @@ public class PlayTimeCommand implements CommandExecutor
                 return false;
             } else {
                 try {
-                    plugin.addPlayTime(args[1], Integer.parseInt(args[2]));
+                    plugin.addPlayTime(plugin.getServer().getPlayerExact(args[1]).getUniqueId(),
+                            Integer.parseInt(args[2]));
                     sender.sendMessage(ChatColor.GREEN + "Added " + Integer.parseInt(args[2])
                             + " seconds of playtime to " + args[1]);
                 } catch (NumberFormatException e) {
@@ -97,7 +98,8 @@ public class PlayTimeCommand implements CommandExecutor
                 return false;
             } else {
                 try {
-                    plugin.removePlayTime(args[1], Integer.parseInt(args[2]));
+                    plugin.removePlayTime(plugin.getServer().getPlayerExact(args[1]).getUniqueId(),
+                            Integer.parseInt(args[2]));
                     sender.sendMessage(ChatColor.GREEN + "Removed " + Integer.parseInt(args[2])
                             + " seconds of playtime from " + args[1]);
                 } catch (NumberFormatException e) {
@@ -123,11 +125,12 @@ public class PlayTimeCommand implements CommandExecutor
                 } else {
                     sender.sendMessage(ChatColor.GREEN
                             + "You have played for "
-                            + plugin.secondsToDaysHoursSecondsString(plugin.getPlayerPlayTime(sender
-                                    .getName()))
+                            + plugin.secondsToDaysHoursSecondsString(plugin.getPlayerPlayTime(plugin
+                                    .getServer().getPlayerExact(sender.getName()).getUniqueId()))
                             + " and have "
-                            + plugin.secondsToDaysHoursSecondsString(plugin.getTimeAllowedInSeconds(sender
-                                    .getName())) + " remaining!");
+                            + plugin.secondsToDaysHoursSecondsString(plugin.getTimeAllowedInSeconds(plugin
+                                    .getServer().getPlayerExact(sender.getName()).getUniqueId()))
+                            + " remaining!");
                     return true;
                 }
             } else if (args.length == 2) {
@@ -136,11 +139,14 @@ public class PlayTimeCommand implements CommandExecutor
                             + "You don't have permission to check other players playtime!");
                     return false;
                 } else {
-                    sender.sendMessage(ChatColor.GREEN + args[1] + " has played for "
-                            + plugin.secondsToDaysHoursSecondsString(plugin.getPlayerPlayTime(args[1]))
+                    sender.sendMessage(ChatColor.GREEN
+                            + args[1]
+                            + " has played for "
+                            + plugin.secondsToDaysHoursSecondsString(plugin.getPlayerPlayTime(plugin
+                                    .getServer().getPlayerExact(args[1]).getUniqueId()))
                             + " and has "
-                            + plugin.secondsToDaysHoursSecondsString(plugin.getTimeAllowedInSeconds(args[1]))
-                            + " remaining!");
+                            + plugin.secondsToDaysHoursSecondsString(plugin.getTimeAllowedInSeconds(plugin
+                                    .getServer().getPlayerExact(args[1]).getUniqueId())) + " remaining!");
                     return true;
                 }
             }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014 by ATLauncher and Contributors
+ * Copyright 2013-2014 by UnoModding, ATLauncher and Contributors
  *
  * This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.
@@ -30,7 +30,7 @@ public class PlayerListener implements Listener
     {
         FileUtils.appendStringToFile(new File(this.plugin.getDataFolder(), "playtime.log"),
                 String.format("[%s] %s logged in", Timestamper.now(), event.getPlayer().getName()));
-        if (this.plugin.getTimeAllowedInSeconds(event.getPlayer().getName()) <= 0) {
+        if (this.plugin.getTimeAllowedInSeconds(event.getPlayer().getUniqueId()) <= 0) {
             FileUtils.appendStringToFile(new File(this.plugin.getDataFolder(), "playtime.log"), String
                     .format("[%s] %s was kicked for exceeding play time", Timestamper.now(), event
                             .getPlayer().getName()));
@@ -39,13 +39,13 @@ public class PlayerListener implements Listener
                             + this.plugin.secondsToDaysHoursSecondsString(this.plugin.secondsUntilNextDay())
                             + "!");
         } else {
-            this.plugin.setPlayerLoggedIn(event.getPlayer().getName());
+            this.plugin.setPlayerLoggedIn(event.getPlayer().getUniqueId());
         }
         event.getPlayer().sendMessage(
                 "You have "
                         + ChatColor.GREEN
                         + plugin.secondsToDaysHoursSecondsString(plugin.getTimeAllowedInSeconds(event
-                                .getPlayer().getName())) + ChatColor.RESET + " of playtime left!");
+                                .getPlayer().getUniqueId())) + ChatColor.RESET + " of playtime left!");
     }
 
     @EventHandler
@@ -53,6 +53,6 @@ public class PlayerListener implements Listener
     {
         FileUtils.appendStringToFile(new File(this.plugin.getDataFolder(), "playtime.log"),
                 String.format("[%s] %s logged out", Timestamper.now(), event.getPlayer().getName()));
-        this.plugin.setPlayerLoggedOut(event.getPlayer().getName());
+        this.plugin.setPlayerLoggedOut(event.getPlayer().getUniqueId());
     }
 }

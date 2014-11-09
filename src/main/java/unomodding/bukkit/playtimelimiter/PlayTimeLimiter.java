@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
+import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -160,94 +161,99 @@ public class PlayTimeLimiter extends JavaPlugin
         return secondsAllowed;
     }
 
-    public int getTimeAllowedInSeconds(String player)
+    public int getTimeAllowedInSeconds(UUID uuid)
     {
         int secondsAllowed = this.getTimeAllowedInSeconds();
 
         // Remove the amount of time the player has played to get their time
         // allowed
-        secondsAllowed -= getPlayerPlayTime(player);
+        secondsAllowed -= getPlayerPlayTime(uuid);
 
         return secondsAllowed;
     }
 
-    public void addPlayTime(String player, int seconds) throws UnknownPlayerException
+    public void addPlayTime(UUID uuid, int seconds) throws UnknownPlayerException
     {
-        if (this.timePlayed.containsKey(player)) {
-            this.timePlayed.put(player, this.timePlayed.get(player) - seconds);
+        if (this.timePlayed.containsKey(uuid)) {
+            this.timePlayed.put(uuid.toString(), this.timePlayed.get(uuid) - seconds);
         } else {
-            throw new UnknownPlayerException(player);
+            throw new UnknownPlayerException(uuid);
         }
     }
 
-    public void removePlayTime(String player, int seconds) throws UnknownPlayerException
+    public void removePlayTime(UUID uuid, int seconds) throws UnknownPlayerException
     {
-        if (this.timePlayed.containsKey(player)) {
-            this.timePlayed.put(player, this.timePlayed.get(player) + seconds);
+        if (this.timePlayed.containsKey(uuid)) {
+            this.timePlayed.put(uuid.toString(), this.timePlayed.get(uuid) + seconds);
         } else {
-            throw new UnknownPlayerException(player);
+            throw new UnknownPlayerException(uuid);
         }
     }
 
-    public int getPlayerPlayTime(String player)
+    public int getPlayerPlayTime(UUID uuid)
     {
         int timePlayed = 0;
-        if (this.timePlayed.containsKey(player)) {
-            timePlayed += this.timePlayed.get(player);
+        if (this.timePlayed.containsKey(uuid)) {
+            timePlayed += this.timePlayed.get(uuid);
         }
-        if (this.timeLoggedIn.containsKey(player)) {
-            timePlayed += (int) ((System.currentTimeMillis() / 1000) - this.timeLoggedIn.get(player));
+        if (this.timeLoggedIn.containsKey(uuid)) {
+            timePlayed += (int) ((System.currentTimeMillis() / 1000) - this.timeLoggedIn.get(uuid));
         }
         return timePlayed;
     }
 
-    public void setPlayerLoggedIn(String player)
+    public void setPlayerLoggedIn(UUID uuid)
     {
-        if (!this.timePlayed.containsKey(player)) {
-            this.timePlayed.put(player, 0);
+        if (!this.timePlayed.containsKey(uuid)) {
+            this.timePlayed.put(uuid.toString(), 0);
             this.savePlayTime();
         }
-        this.timeLoggedIn.put(player, (int) (System.currentTimeMillis() / 1000));
+        this.timeLoggedIn.put(uuid.toString(), (int) (System.currentTimeMillis() / 1000));
     }
 
-    public void setPlayerLoggedOut(String player)
+    private void setPlayerLoggedOut(String uuid)
     {
-        if (this.timeLoggedIn.containsKey(player)) {
-            int timePlayed = (int) ((System.currentTimeMillis() / 1000) - this.timeLoggedIn.get(player));
-            if (this.timePlayed.containsKey(player)) {
-                timePlayed += this.timePlayed.get(player);
+        if (this.timeLoggedIn.containsKey(uuid)) {
+            int timePlayed = (int) ((System.currentTimeMillis() / 1000) - this.timeLoggedIn.get(uuid));
+            if (this.timePlayed.containsKey(uuid)) {
+                timePlayed += this.timePlayed.get(uuid);
             }
             if (timePlayed > this.getTimeAllowedInSeconds()) {
                 timePlayed = this.getTimeAllowedInSeconds();
             }
-            this.timePlayed.put(player, timePlayed);
-            this.timeLoggedIn.remove(player);
-            getLogger().info("Player " + player + " played for a total of " + timePlayed + " seconds!");
+            this.timePlayed.put(uuid, timePlayed);
+            this.timeLoggedIn.remove(uuid);
+            getLogger().info("Player " + uuid + " played for a total of " + timePlayed + " seconds!");
             this.savePlayTime();
         }
-        if (this.seenWarningMessages.containsKey(player + ":10")) {
-            this.seenWarningMessages.remove(player + ":10");
+        if (this.seenWarningMessages.containsKey(uuid + ":10")) {
+            this.seenWarningMessages.remove(uuid + ":10");
         }
-        if (this.seenWarningMessages.containsKey(player + ":60")) {
-            this.seenWarningMessages.remove(player + ":60");
+        if (this.seenWarningMessages.containsKey(uuid + ":60")) {
+            this.seenWarningMessages.remove(uuid + ":60");
         }
-        if (this.seenWarningMessages.containsKey(player + ":300")) {
-            this.seenWarningMessages.remove(player + ":300");
+        if (this.seenWarningMessages.containsKey(uuid + ":300")) {
+            this.seenWarningMessages.remove(uuid + ":300");
         }
     }
 
-    public boolean hasPlayerSeenMessage(String player, int time)
+    public void setPlayerLoggedOut(UUID uuid)
     {
-        if (this.seenWarningMessages.containsKey(player + ":" + time)) {
-            return this.seenWarningMessages.get(player + ":" + time);
+        setPlayerLoggedOut(uuid);
+    }
+
+    public boolean hasPlayerSeenMessage(UUID uuid, int time)
+    {
+        if (this.seenWarningMessages.containsKey(uuid + ":" + time)) {
+            return this.seenWarningMessages.get(uuid + ":" + time);
         } else {
             return false;
         }
     }
 
-    public void sentPlayerWarningMessage(String player, int time)
+    public void sentPlayerWarningMessage(UUID uuid, int time)
     {
-        this.seenWarningMessages.put(player + ":" + time, true);
+        this.seenWarningMessages.put(uuid + ":" + time, true);
     }
 
     public boolean start()
