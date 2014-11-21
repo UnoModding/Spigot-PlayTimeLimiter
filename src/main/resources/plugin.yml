@@ -30,6 +30,6 @@ permissions:
   playtimelimiter.playtime.start:
     description: Gives access to the /playtime start command which starts the timer.
     default: op
-  playtimelimiter.playtime.stop
+  playtimelimiter.playtime.stop:
     description: Gives access to the /playtime stop command which stops the timer.
     default: op

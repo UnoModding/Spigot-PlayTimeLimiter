@@ -6,7 +6,7 @@
 	<groupId>unomodding.bukkit</groupId>
 	<artifactId>playtimelimiter</artifactId>
 	<name>PlayTimeLimiter</name>
-	<version>0.1</version>
+	<version>0.2</version>
 	<packaging>jar</packaging>
 	<url>https://github.com/UnoModding/PlayTimeLimiter</url>
 	<inceptionYear>2014</inceptionYear>
@@ -16,6 +16,10 @@
 		<repository>
 			<id>bukkit-repo</id>
 			<url>http://repo.bukkit.org/content/groups/public</url>
+		</repository>
+		<repository>
+			<id>Plugin Metrics</id>
+            <url>http://repo.mcstats.org/content/repositories/public</url>
 		</repository>
 	</repositories>
 
@@ -31,6 +35,12 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.2.4</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mcstats.bukkit</groupId>
+			<artifactId>metrics</artifactId>
+			<version>R7</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
@@ -51,6 +61,21 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<artifactSet>
+ 						<includes>
+							<include>org.mcstats.*:*</include>
+							<include>com.google.code.gson:gson</include>
+						</includes>
+					</artifactSet>
+					<relocations>
+						<relocation>
+							<pattern>org.mcstats</pattern>
+							<shadedPattern>unomodding.bukkit</shadedPattern>
+						</relocation>
+					</relocations>
+				</configuration>
 				<executions>
 					<execution>
 						<phase>package</phase>

@@ -21,6 +21,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.Metrics;
 
 import unomodding.bukkit.playtimelimiter.exceptions.UnknownPlayerException;
 import unomodding.bukkit.playtimelimiter.threads.PlayTimeCheckerTask;
@@ -76,22 +77,18 @@ public class PlayTimeLimiter extends JavaPlugin
         if (getConfig().isSet("timeStarted")) {
             this.started = true;
         }
-
         if (!getConfig().isSet("initialTime")) {
             getConfig().set("initialTime", 28800);
             saveConfig();
         }
-
         if (!getConfig().isSet("timePerDay")) {
             getConfig().set("timePerDay", 3600);
             saveConfig();
         }
-
         if (!getConfig().isSet("secondsBetweenPlayTimeChecks")) {
             getConfig().set("secondsBetweenPlayTimeChecks", 10);
             saveConfig();
         }
-
         if (!getConfig().isSet("secondsBetweenPlayTimeSaving")) {
             getConfig().set("secondsBetweenPlayTimeSaving", 600);
             saveConfig();
@@ -113,11 +110,17 @@ public class PlayTimeLimiter extends JavaPlugin
             this.savePlayTimeTimer.scheduleAtFixedRate(new PlayTimeSaverTask(this), 30000, getConfig()
                     .getInt("secondsBetweenPlayTimeSaving") * 1000);
         }
-
         if (checkPlayTimeTimer == null) {
             this.checkPlayTimeTimer = new Timer();
             this.checkPlayTimeTimer.scheduleAtFixedRate(new PlayTimeCheckerTask(this), 30000, getConfig()
                     .getInt("secondsBetweenPlayTimeChecks") * 1000);
+        }
+        
+        try {
+            Metrics metrics = new Metrics(this);
+            metrics.start();
+        } catch (IOException e) {
+            getLogger().info("Couldn't send Metrics data.");
         }
     }
 
