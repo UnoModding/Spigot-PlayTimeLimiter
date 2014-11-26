@@ -1,5 +1,5 @@
 name: ${project.name}
-main: unomodding.bukkit.playtimelimiter.PlayTimeLimiter
+main: ${main.class}
 version: ${project.version}
 commands:
   playtime:

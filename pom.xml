@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--suppress ALL -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	
 	<groupId>unomodding.bukkit</groupId>
 	<artifactId>playtimelimiter</artifactId>
+	
 	<name>PlayTimeLimiter</name>
-	<version>0.25</version>
-	<packaging>jar</packaging>
-	<url>https://github.com/UnoModding/PlayTimeLimiter</url>
+	<description>PlayTimeLimiter is a Bukkit plugin to allow server owners to limit the amount of time their players spend on a server.</description>
+	<url>https://github.com/UnoModding/Bukkit-PlayTimeLimiter</url>
+	<version>0.3-dev</version>
 	<inceptionYear>2014</inceptionYear>
-	<description>PlayTimeLimiter is a Bukkit plugin for Minecraft servers to only allow players to limit the amount of time players spend on your server.</description>
+	<packaging>jar</packaging>
+	
+	<properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <main.class>${project.groupId}.${project.artifactId}.${project.name}</main.class>
+    </properties>
+	
+	<organization>
+		<name>UnoModding</name>
+		<url>https://github.com/UnoModding</url>
+	</organization>
 
 	<repositories>
 		<repository>
@@ -60,6 +71,25 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<archive>
+						<index>true</index>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>${mainclass}</mainClass>
+						</manifest>
+						<manifestEntries>
+							<Implementation-Vender>UnoModding</Implementation-Vender>
+							<Implementation-Version>${project.version}</Implementation-Version>
+							<Built-By>${user.name}</Built-By>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>2.3</version>
 				<configuration>
@@ -72,7 +102,7 @@
 					<relocations>
 						<relocation>
 							<pattern>org.mcstats</pattern>
-							<shadedPattern>unomodding.bukkit</shadedPattern>
+							<shadedPattern>unomodding.bukkit.playtimelimiter.mcstats</shadedPattern>
 						</relocation>
 					</relocations>
 				</configuration>
