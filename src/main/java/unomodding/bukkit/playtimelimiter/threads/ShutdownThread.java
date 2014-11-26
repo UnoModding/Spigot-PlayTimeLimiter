@@ -8,18 +8,16 @@ package unomodding.bukkit.playtimelimiter.threads;
 
 import unomodding.bukkit.playtimelimiter.PlayTimeLimiter;
 
-public class ShutdownThread extends Thread
-{
-    private final PlayTimeLimiter plugin;
+public class ShutdownThread extends Thread {
+	private final PlayTimeLimiter plugin;
 
-    public ShutdownThread(PlayTimeLimiter plugin) {
-        this.plugin = plugin;
-    }
+	public ShutdownThread(PlayTimeLimiter plugin) {
+		this.plugin = plugin;
+	}
 
-    @Override
-    public void run()
-    {
-        this.plugin.savePlayTime(true); // Force save playtime when server is
-                                        // shut down
-    }
+	@Override
+	public void run() {
+		this.plugin.savePlayTime(true); // Force save playtime when server is
+										// shut down
+	}
 }
