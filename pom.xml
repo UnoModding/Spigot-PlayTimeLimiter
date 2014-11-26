@@ -6,7 +6,7 @@
 	<groupId>unomodding.bukkit</groupId>
 	<artifactId>playtimelimiter</artifactId>
 	<name>PlayTimeLimiter</name>
-	<version>0.2</version>
+	<version>0.25</version>
 	<packaging>jar</packaging>
 	<url>https://github.com/UnoModding/PlayTimeLimiter</url>
 	<inceptionYear>2014</inceptionYear>
