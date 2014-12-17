@@ -46,7 +46,6 @@ public class PlayTimeLimiter extends JavaPlugin {
 	private boolean shutdownHookAdded = false;
 	private Timer savePlayTimeTimer = null;
 	private Timer checkPlayTimeTimer = null;
-	private boolean timeTravels = true;
 	private boolean started = false;
 	private final Gson GSON = new Gson();
 
@@ -94,8 +93,6 @@ public class PlayTimeLimiter extends JavaPlugin {
 		if (!getConfig().isSet("timeTravels")) {
 			getConfig().set("timeTravels", true);
 			saveConfig();
-		} else {
-			this.timeTravels = getConfig().getBoolean("timeTravels");
 		}
 
 		getLogger().info(
@@ -165,10 +162,10 @@ public class PlayTimeLimiter extends JavaPlugin {
 		// set amount of
 		// seconds to the time allowed
 		while (secondsSince >= 0) {
-			if (timeTravels) {
-				secondsAllowed = getConfig().getInt("timePerDay");
-			} else {
+			if (getConfig().getBoolean("timeTravels")) {
 				secondsAllowed += getConfig().getInt("timePerDay");
+			} else {
+				secondsAllowed = getConfig().getInt("timePerDay");
 			}
 			secondsSince -= 86400;
 		}
