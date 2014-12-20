@@ -77,7 +77,7 @@ public class PlayTimeCommand implements CommandExecutor {
 			} else {
 				try {
 					plugin.addPlayTime(
-							plugin.getServer().getPlayerExact(args[1])
+							plugin.getServer().getOfflinePlayer(args[1])
 									.getUniqueId(), Integer.parseInt(args[2]));
 					sender.sendMessage(ChatColor.GREEN + "Added "
 							+ Integer.parseInt(args[2])
@@ -107,7 +107,7 @@ public class PlayTimeCommand implements CommandExecutor {
 			} else {
 				try {
 					plugin.removePlayTime(
-							plugin.getServer().getPlayerExact(args[1])
+							plugin.getServer().getOfflinePlayer(args[1])
 									.getUniqueId(), Integer.parseInt(args[2]));
 					sender.sendMessage(ChatColor.GREEN + "Removed "
 							+ Integer.parseInt(args[2])
@@ -141,12 +141,12 @@ public class PlayTimeCommand implements CommandExecutor {
 							+ "You have played for "
 							+ plugin.secondsToDaysHoursSecondsString(plugin
 									.getPlayerPlayTime(plugin.getServer()
-											.getPlayerExact(sender.getName())
+											.getOfflinePlayer(sender.getName())
 											.getUniqueId()))
 							+ " and have "
 							+ plugin.secondsToDaysHoursSecondsString(plugin
 									.getTimeAllowedInSeconds(plugin.getServer()
-											.getPlayerExact(sender.getName())
+											.getOfflinePlayer(sender.getName())
 											.getUniqueId())) + " remaining!");
 					return true;
 				}
@@ -162,12 +162,12 @@ public class PlayTimeCommand implements CommandExecutor {
 							+ " has played for "
 							+ plugin.secondsToDaysHoursSecondsString(plugin
 									.getPlayerPlayTime(plugin.getServer()
-											.getPlayerExact(args[1])
+											.getOfflinePlayer(args[1])
 											.getUniqueId()))
 							+ " and has "
 							+ plugin.secondsToDaysHoursSecondsString(plugin
 									.getTimeAllowedInSeconds(plugin.getServer()
-											.getPlayerExact(args[1])
+											.getOfflinePlayer(args[1])
 											.getUniqueId())) + " remaining!");
 					return true;
 				}

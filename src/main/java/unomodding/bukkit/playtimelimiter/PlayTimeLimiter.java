@@ -94,14 +94,14 @@ public class PlayTimeLimiter extends JavaPlugin {
 			getConfig().set("timeTravels", true);
 			saveConfig();
 		}
-		if (!getConfig().isSet("timeCap")) {
+		/*if (!getConfig().isSet("timeCap")) {
 			getConfig().set("timeCap", true);
 			saveConfig();
 		}
 		if (!getConfig().isSet("timeCapValue")) {
 			getConfig().set("timeCapValue", 18000);
 			saveConfig();
-		}
+		}*/
 
 		getLogger().info(
 				String.format("Server started at %s which was %s seconds ago!",

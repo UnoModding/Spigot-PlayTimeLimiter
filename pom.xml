@@ -7,8 +7,8 @@
 	<artifactId>playtimelimiter</artifactId>
 	
 	<name>PlayTimeLimiter</name>
-	<description>PlayTimeLimiter is a Bukkit plugin to allow server owners to limit the amount of time their players spend on a server.</description>
-	<url>https://github.com/UnoModding/Bukkit-PlayTimeLimiter</url>
+	<description>PlayTimeLimiter is a Spigot plugin to allow server owners to limit the amount of time their players spend on a server.</description>
+	<url>https://github.com/UnoModding/Spigot-PlayTimeLimiter</url>
 	<version>0.3-dev</version>
 	<inceptionYear>2014</inceptionYear>
 	<packaging>jar</packaging>
@@ -25,8 +25,8 @@
 
 	<repositories>
 		<repository>
-			<id>bukkit-repo</id>
-			<url>http://repo.bukkit.org/content/groups/public</url>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
 		</repository>
 		<repository>
 			<id>Plugin Metrics</id>
@@ -38,7 +38,7 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.6.4-R2.0</version>
+			<version>1.8-R0.1-SNAPSHOT</version>
 			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>
