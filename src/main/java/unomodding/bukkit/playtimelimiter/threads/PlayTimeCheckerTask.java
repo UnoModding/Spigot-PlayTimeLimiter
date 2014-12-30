@@ -7,7 +7,6 @@
 package unomodding.bukkit.playtimelimiter.threads;
 
 import java.io.File;
-import java.util.TimerTask;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -16,14 +15,13 @@ import unomodding.bukkit.playtimelimiter.PlayTimeLimiter;
 import unomodding.bukkit.playtimelimiter.utils.FileUtils;
 import unomodding.bukkit.playtimelimiter.utils.Timestamper;
 
-public class PlayTimeCheckerTask extends TimerTask {
+public class PlayTimeCheckerTask implements Runnable {
 	private final PlayTimeLimiter plugin;
 
 	public PlayTimeCheckerTask(PlayTimeLimiter instance) {
 		this.plugin = instance;
 	}
 
-	@Override
 	public void run() {
 		for (Player player : this.plugin.getServer().getOnlinePlayers()) {
 			int timeLeft = this.plugin.getTimeAllowedInSeconds(player

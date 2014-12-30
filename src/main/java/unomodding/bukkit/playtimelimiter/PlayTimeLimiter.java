@@ -44,14 +44,13 @@ public class PlayTimeLimiter extends JavaPlugin {
 	private Map<String, Boolean> seenWarningMessages = new HashMap<String, Boolean>();
 
 	private boolean shutdownHookAdded = false;
-	private Timer savePlayTimeTimer = null;
-	private Timer checkPlayTimeTimer = null;
 	private boolean started = false;
 	private final Gson GSON = new Gson();
 
 	@Override
 	public void onDisable() {
 		this.savePlayTime(); // Save the playtime to file on plugin disable
+		this.getServer().getScheduler().cancelTasks(this);
 	}
 
 	@Override
@@ -118,18 +117,12 @@ public class PlayTimeLimiter extends JavaPlugin {
 		// Load the playtime from file
 		this.loadPlayTime();
 
-		if (savePlayTimeTimer == null) {
-			this.savePlayTimeTimer = new Timer();
-			this.savePlayTimeTimer.scheduleAtFixedRate(new PlayTimeSaverTask(
-					this), 30000,
-					getConfig().getInt("secondsBetweenPlayTimeSaving") * 1000);
-		}
-		if (checkPlayTimeTimer == null) {
-			this.checkPlayTimeTimer = new Timer();
-			this.checkPlayTimeTimer.scheduleAtFixedRate(
-					new PlayTimeCheckerTask(this), 30000,
-					getConfig().getInt("secondsBetweenPlayTimeChecks") * 1000);
-		}
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this,
+		    new PlayTimeSaverTask(this), 30000,
+		        getConfig().getInt("secondsBetweenPlayTimeSaving") * 1000);
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this,
+				new PlayTimeCheckerTask(this), 30000,
+				getConfig().getInt("secondsBetweenPlayTimeChecks") * 1000);
 
 		try {
 			Metrics metrics = new Metrics(this);

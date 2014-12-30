@@ -6,18 +6,15 @@
  */
 package unomodding.bukkit.playtimelimiter.threads;
 
-import java.util.TimerTask;
-
 import unomodding.bukkit.playtimelimiter.PlayTimeLimiter;
 
-public class PlayTimeSaverTask extends TimerTask {
+public class PlayTimeSaverTask implements Runnable  {
 	private final PlayTimeLimiter plugin;
 
 	public PlayTimeSaverTask(PlayTimeLimiter instance) {
 		this.plugin = instance;
 	}
 
-	@Override
 	public void run() {
 		this.plugin.savePlayTime(); // Save playtime every 10 minutes
 	}
