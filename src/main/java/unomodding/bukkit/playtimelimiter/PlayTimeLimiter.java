@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 by UnoModding, RyanTheAllmighty and Contributors
+ * Copyright 2014-2015 by UnoModding, RyanTheAllmighty and Contributors
  *
  * This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.
@@ -14,12 +14,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Timer;
 import java.util.UUID;
 
 import org.bukkit.ChatColor;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
@@ -38,7 +35,7 @@ import com.google.gson.reflect.TypeToken;
  * @author Jamie Mansfield <https://github.com/lexware>
  */
 public class PlayTimeLimiter extends JavaPlugin {
-	private final PlayerListener playerListener = new PlayerListener(this);
+	private final PlayTimeListener playerListener = new PlayTimeListener(this);
 	private Map<String, Integer> timePlayed = new HashMap<String, Integer>();
 	private Map<String, Integer> timeLoggedIn = new HashMap<String, Integer>();
 	private Map<String, Boolean> seenWarningMessages = new HashMap<String, Boolean>();
@@ -64,8 +61,7 @@ public class PlayTimeLimiter extends JavaPlugin {
 			}
 		}
 		// Register our events
-		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(playerListener, this);
+		getServer().getPluginManager().registerEvents(playerListener, this);
 
 		// Register our commands
 		getCommand("playtime").setExecutor(new PlayTimeCommand(this));
@@ -109,9 +105,8 @@ public class PlayTimeLimiter extends JavaPlugin {
 								.currentTimeMillis() / 1000) - getConfig()
 								.getInt("timeStarted")))));
 
-		PluginDescriptionFile pdfFile = this.getDescription();
 		getLogger().info(
-				pdfFile.getName() + " version " + pdfFile.getVersion()
+				getDescription().getName() + " version " + getDescription().getVersion()
 						+ " is enabled!");
 
 		// Load the playtime from file
@@ -225,6 +220,10 @@ public class PlayTimeLimiter extends JavaPlugin {
 				(int) (System.currentTimeMillis() / 1000));
 	}
 
+	public void setPlayerLoggedOut(UUID uuid) {
+		setPlayerLoggedOut(uuid.toString());
+	}
+
 	private void setPlayerLoggedOut(String uuid) {
 		if (this.timeLoggedIn.containsKey(uuid)) {
 			int timePlayed = (int) ((System.currentTimeMillis() / 1000) - this.timeLoggedIn
@@ -251,10 +250,6 @@ public class PlayTimeLimiter extends JavaPlugin {
 		if (this.seenWarningMessages.containsKey(uuid + ":300")) {
 			this.seenWarningMessages.remove(uuid + ":300");
 		}
-	}
-
-	public void setPlayerLoggedOut(UUID uuid) {
-		setPlayerLoggedOut(uuid);
 	}
 
 	public boolean hasPlayerSeenMessage(UUID uuid, int time) {

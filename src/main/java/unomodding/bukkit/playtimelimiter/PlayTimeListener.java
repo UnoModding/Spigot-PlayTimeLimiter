@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2014 by UnoModding, ATLauncher and Contributors
+ * Copyright 2013-2015 by UnoModding, ATLauncher and Contributors
  *
  * This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.
@@ -17,10 +17,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import unomodding.bukkit.playtimelimiter.utils.FileUtils;
 import unomodding.bukkit.playtimelimiter.utils.Timestamper;
 
-public class PlayerListener implements Listener {
+public class PlayTimeListener implements Listener {
 	private final PlayTimeLimiter plugin;
 
-	public PlayerListener(PlayTimeLimiter instance) {
+	public PlayTimeListener(PlayTimeLimiter instance) {
 		this.plugin = instance;
 	}
 
